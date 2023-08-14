@@ -1,16 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-#define MAX_NODES 1024
+#define MAX_NODES 1026
 
 struct Graph {
     int cor[MAX_NODES][MAX_NODES];  // 0 preto, 1 branco
-    int numero[MAX_NODES];
-    int quantidade;
+    int numero[MAX_NODES*2];
 };
 
-int visited[MAX_NODES];
+int visited[MAX_NODES*2] = {0};
 
 struct Graph* createGraph(int I, int J) {  // cria grafo
     struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
@@ -45,7 +43,7 @@ void dfs(struct Graph* graph, int i, int j, int M, int node) {
     if (graph->cor[i-1][j] == 1 && !visited[node-M-2]) {
         dfs(graph, i-1, j, M, node-M-2);
     }
-    return;
+
 }
 
 int main () {
@@ -54,7 +52,7 @@ int main () {
     char cor[MAX_NODES];
 
     scanf("%d %d", &N, &M);
-    struct Graph* graph = createGraph(N, M); 
+    struct Graph* graph = createGraph(N+2, M+2); 
     int number = 0;
     
     for (int i = 1; i <= N; i++) {
@@ -66,18 +64,18 @@ int main () {
         }
     }
     
-    graph->quantidade = 0;
+    int quantidade = 0;
     for (int i = 0; i <= N+1; i++) {
         for (int j = 0; j <= M+1; j++) {
             if (graph->cor[i][j] == 1 && !visited[number]) {
                 dfs(graph, i, j, M, number);
-                graph->quantidade++;
+                quantidade++;
             }
             number++;
         }
     }
 
-    printf("%d\n", graph->quantidade);
+    printf("%d\n", quantidade);
 
     return 0;
 }
